@@ -1,0 +1,64 @@
+<div id="nps" class="hidden">
+  <p>Qual a probabilidade de você recomendar o Lejour para outra pesssoa?</p>
+
+  <input type="range" min="0" [max]="options.length - 1" step="1" [value]="selected">
+
+  <div>
+    <ul>
+      <li *ngFor="let option of options; let i = index"
+        [ngClass]="{'active': selected == i}"
+        [ngStyle]="{'color': selected >= i ? option.color : 'transparent'}"
+        (mouseenter)="select(i)" (click)="select(i); submitScore(i); pulse($event.target)">
+        <span>{{ option.label }}</span>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div id="overlay" class="hidden"></div>
+
+<div #modalComment id="modalComment" class="modal-container hidden">
+    <span class="close" (click)="close(modalComment, true)">X</span>
+    <div class="header">
+      <div class="banner">
+        <p>
+          Você nos deu nota {{ selected }}!<br/>
+          <span *ngIf="selected <= 6" class="emoticon">😯</span>
+          <span *ngIf="selected >= 7 && selected <= 8" class="emoticon">🙂</span>
+          <span *ngIf="selected >= 9" class="emoticon">😃</span>
+        </p>
+      </div>
+    </div>
+    <div class="content">
+      <p>
+        Dica? Reclamação? Só um obrigado?<br/>
+        Pode escrever aqui pra agente!
+      </p>
+      <textarea [(ngModel)]="userFeedback.comment" type="text" placeholder="Seu comentário"
+        maxlength="140"></textarea>
+      <p class="charCounter">
+        {{ userFeedback.comment.length }} de 140 caracteres
+      </p>
+    </div>
+    <div class="footer">
+        <button (click)="close(modalComment); submitComment()"
+        [disabled]="userFeedback.comment.length < 2">enviar comentário</button>
+    </div>
+</div>
+
+<div #modalThanks id="modalThanks" class="modal-container hidden">
+  <span class="close" (click)="close(modalThanks, true)">X</span>
+  <div class="header">
+    <h2>Muito obrigado!</h2>
+  </div>
+  <div class="content">
+    <p>
+      Sua opinião é muito importante para nós, de verdade!
+      É a partir de comentários como o seu que nos reiventamos
+      para melhorar e ajudar cada vez mais noivas em suas jornadas.
+    </p>
+  </div>
+  <div class="footer">
+    <button (click)="close(modalThanks, true)">fechar</button>
+  </div>
+</div>
